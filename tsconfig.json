@@ -1,0 +1,15 @@
+{
+    "compilerOptions": {
+        "target": "ES5",
+        "module": "ES6",
+        "moduleResolution": "Classic",
+        "outDir": "dist",
+        "lib": ["ESNext", "DOM"],
+        // Include any type declarations in @types
+        "types" : [],
+        "declaration": true
+    },
+    "include" : [
+        "src/**/*"
+    ]
+}
