@@ -11,5 +11,8 @@
   "license": "ISC",
   "devDependencies": {
     "typescript": "^3.9.3"
+  },
+  "dependencies": {
+    "redux": "^4.0.5"
   }
 }
