@@ -22,23 +22,6 @@ const defaults : Options = {
 
 export function createRequestMiddleware(opts: Options = defaults) {
 
-    /*
-        The function returned here doesn't invoke the next piece
-        of middleware in the chain, so it should be placed at the end.
-
-        The reasoning behind this is to make request actions dispatched
-        with this middleware chainable.
-
-        Ex:
-
-        dispatch({
-            requestInstance: axios.create({ ... }),
-            auth: true,
-        }).then((response) => {
-            ...
-        });
-    */
-
     return function(store : Store) {
         return (next : any) => (action : RequestAction) => {
 
