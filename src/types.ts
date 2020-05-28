@@ -1,9 +1,12 @@
-import { Store } from 'redux';
-import { AxiosRequestConfig, AxiosResponse, AxiosError } from 'axios';
+import { Store } from "redux";
+import { AxiosRequestConfig, AxiosResponse, AxiosError } from "axios";
+
+type passTokenOptions = "bearer" | "body";
 
 export interface Options {
     resolveToken: (store: Store) => string, // returns access token to dispatch requests
-    authAsBearerToken?: boolean,
+    passToken?: passTokenOptions,
+    tokenField?: string,
 };
 
 export interface RequestAction {

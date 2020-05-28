@@ -1,6 +1,6 @@
-import { Options, RequestAction } from './types';
-import { Store } from 'redux';
-import axios from 'axios';
+import { Options, RequestAction } from "./types";
+import { Store } from "redux";
+import axios from "axios";
 
 // Shorthand
 
@@ -11,12 +11,13 @@ const error = console.error;
 export {
     Options,
     RequestAction
-} from './types';
+} from "./types";
 
 // Default options
 const defaults : Options = {
     resolveToken: null,
-    authAsBearerToken: true,
+    passToken: "bearer",
+    tokenField: "access"
 };
 
 export function createRequestMiddleware(opts: Options = defaults) {
@@ -53,7 +54,11 @@ export function createRequestMiddleware(opts: Options = defaults) {
 
                 // Add authorization header to request config
                 let token = opts.resolveToken(store);
-                action.request.headers['Authorization'] = 'Bearer ' + token;
+
+                if(opts.passToken === "bearer")
+                    action.request.headers["Authorization"] = "Bearer " + token;
+                if(opts.passToken === "body")
+                    action.request.data[opts.tokenField] = token;
             }
 
             // Continue with callbacks
