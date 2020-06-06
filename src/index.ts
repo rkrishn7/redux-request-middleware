@@ -16,8 +16,6 @@ export {
 // Default options
 const defaults : Options = {
     resolveToken: null,
-    passToken: "bearer",
-    tokenField: "access"
 };
 
 export function createRequestMiddleware(opts: Options = defaults) {
@@ -38,10 +36,12 @@ export function createRequestMiddleware(opts: Options = defaults) {
                 // Add authorization header to request config
                 let token = opts.resolveToken(store);
 
-                if(opts.passToken === "bearer")
+                if(opts.appendToken) {
+                    action.request = opts.appendToken(action.request);
+                } else {
+                    // Default behavior
                     action.request.headers["Authorization"] = "Bearer " + token;
-                if(opts.passToken === "body")
-                    action.request.data[opts.tokenField] = token;
+                }
             }
 
             // Continue with callbacks
