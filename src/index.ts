@@ -1,11 +1,7 @@
 import { Options, RequestAction } from "./types";
 import { Store } from "redux";
+import { warn } from "./utils";
 import axios from "axios";
-
-// Shorthand
-
-const warn  = console.warn;
-const error = console.error;
 
 // Types
 export {
@@ -18,6 +14,11 @@ const defaults : Options = {
     resolveToken: null,
 };
 
+
+/**
+ * Creates the request middleware with the specified options.
+ * @param {Options} opts 
+ */
 export function createRequestMiddleware(opts: Options = defaults) {
 
     return function(store : Store) {
