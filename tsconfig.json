@@ -3,7 +3,7 @@
         "target": "ES5",
         "module": "ES2015",
         "moduleResolution": "Node",
-        "outDir": "dist",
+        "outDir": "lib",
         "lib": ["ESNext", "DOM"],
         // Include any type declarations in @types
         "types" : [],
