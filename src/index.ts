@@ -41,7 +41,7 @@ export function createRequestMiddleware(opts: Options = defaults) {
                     action.request = opts.appendToken(action.request);
                 } else {
                     // Default behavior
-                    action.request.headers["Authorization"] = "Bearer " + token;
+                    action.request.headers["authorization"] = "Bearer " + token;
                 }
             }
 
@@ -50,6 +50,7 @@ export function createRequestMiddleware(opts: Options = defaults) {
                 return axios(action.request).then(function(response) {
                     action.handleResponse(response);
                     return next(action);
+
                 }).catch(function(error) {
                     if(!action.handleError) {
                         warn(`
@@ -62,6 +63,7 @@ export function createRequestMiddleware(opts: Options = defaults) {
                     
                     action.handleError(error);
                     return next(action);
+
                 });
             }
 
