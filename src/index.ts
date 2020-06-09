@@ -22,10 +22,11 @@ const defaults : Options = {
 export function createRequestMiddleware(opts: Options = defaults) {
 
     return function(store : Store) {
-        return (next : any) => (action : RequestAction) => {
+        return (next : any) => (action : any) => {
 
-            if(typeof action.request === "undefined")
+            if(!action.request) {
                 return next(action);
+            }
 
             if(action.auth) {
                 if(!opts.resolveToken) {

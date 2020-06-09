@@ -19,6 +19,16 @@ export function setAccessToken(value) {
     }
 }
 
+export function getInitialAccessToken() {
+    return {
+        request: {
+            url: "http://localhost:3000/api/access",
+            method: "get"
+        },
+        auth: false,
+    };
+}
+
 /**
  * Reducer
  */
@@ -45,4 +55,15 @@ function root(state = initialState, action) {
     }
 }
 
-export default Redux.createStore(root, Redux.applyMiddleware(ReduxThunk.default));
+const REDUX_REQUEST_MIDDLEWARE_OPTIONS = {
+    resolveToken: function(store) {
+        return "sdsdf";
+    }
+};
+
+export default Redux.createStore(root, 
+    Redux.applyMiddleware(
+        ReduxThunk.default,
+        ReduxReqMW.createRequestMiddleware(REDUX_REQUEST_MIDDLEWARE_OPTIONS)
+    )
+);

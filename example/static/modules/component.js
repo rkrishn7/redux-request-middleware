@@ -1,11 +1,26 @@
 import {
-    setRefreshToken,
-    setAccessToken
+    setAccessToken,
+    getInitialAccessToken
 } from "./store.js";
 
 class Main extends React.Component {
 
     static #ORIGIN = "http://localhost:3000/api/";
+
+    componentDidMount() {
+        // Simulate login, retrieve access token
+        
+        this.props.simulateLogin().then((response) => {
+
+            if(response.statusText === "OK")
+                this.props.updateAccess(response.data.access)
+            else
+                this.setState((state) => ({
+                    ...state,
+                    error: "Unable to retrieve initial access token"
+                }));
+        });
+    }
 
     constructor(props) {
         super(props);
@@ -19,7 +34,6 @@ class Main extends React.Component {
     }
 
     makeRequest() {
-        console.log('hello');
         fetch(Main.#ORIGIN + 'protected/', {
             headers: {
                 "Authorization" : "Bearer sdsdf"
@@ -36,11 +50,7 @@ class Main extends React.Component {
                     response: "OK"
                 };
             });
-        })
-    }
-
-    getAccessToken() {
-
+        });
     }
 
     render() {
@@ -64,4 +74,11 @@ function mapStateToProps(state) {
     };
 }
 
-export default ReactRedux.connect(mapStateToProps)(Main);
+function mapDispatchToProps(dispatch) {
+    return {
+        simulateLogin: () => dispatch(getInitialAccessToken()),
+        updateAccess: (value) => dispatch(setAccessToken(value))
+    }
+}
+
+export default ReactRedux.connect(mapStateToProps, mapDispatchToProps)(Main);
