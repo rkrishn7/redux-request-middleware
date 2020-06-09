@@ -2,6 +2,8 @@ const express   = require("express");
 const path      = require("path");
 const jwt       = require("jsonwebtoken");
 
+const axios     = require("axios").default;
+
 const app = express();
 
 const SECRET = 'SECRET_HERE';
@@ -31,24 +33,41 @@ function auth(req, res, next) {
     });
 }
 
-app.get("/api/access", function(req, res, next) {
-    const token = jwt.sign({ 
+app.get("/api/login", function(req, res, next) {
+
+    const access = jwt.sign({ 
         foo: 'bar', 
-        exp: Math.floor(Date.now() / 1000) + 30
+        exp: Math.floor(Date.now() / 1000) + 30 // 30 seconds
+    }, SECRET);
+
+    const refresh = jwt.sign({ 
+        foo: 'bar', 
     }, SECRET);
 
     return res.json({
-        access: token
+        access,
+        refresh
     });
 });
 
-app.get("/api/refresh", function(req, res, next) {
-    const token = jwt.sign({ 
-        foo: 'bar'
-    }, SECRET);
+app.get("/api/access", function(req, res, next) {
 
-    return res.json({
-        refresh: token
+    const refresh = req.query.refresh;
+
+    jwt.verify(refresh, SECRET, function(err) {
+        if(err) {
+            console.log(err);
+            return res.status(400).json({ error: "Access Denied" });
+        }
+
+        const token = jwt.sign({
+            foo: 'bar', 
+            exp: Math.floor(Date.now() / 1000) + 30 // 30 seconds
+        }, SECRET);
+
+        return res.json({
+            access: token
+        });
     });
 });
 

@@ -10,15 +10,11 @@ class Main extends React.Component {
     componentDidMount() {
         // Simulate login, retrieve access token
         
-        this.props.simulateLogin().then((response) => {
-
-            if(response.statusText === "OK")
-                this.props.updateAccess(response.data.access)
-            else
-                this.setState((state) => ({
-                    ...state,
-                    error: "Unable to retrieve initial access token"
-                }));
+        this.props.simulateLogin().catch((err) => {
+            this.setState((state) => ({
+                ...state,
+                error: err.message
+            }));
         });
     }
 
@@ -62,7 +58,9 @@ class Main extends React.Component {
                 onClick: () => {}
               }, "Get access token"), 
               React.createElement("div", null, "Error: ", this.state.error),
-              React.createElement("div", null, "Access Token: ", this.props.access))
+              React.createElement("div", null, "Access Token: ", this.props.access),
+              React.createElement("div", null, "Refresh Token: ", this.props.refresh)
+            )
         );
     }
 }
