@@ -24,6 +24,9 @@ export function createRequestMiddleware(opts: Options = defaults) {
     return function(store : Store) {
         return (next : any) => (action : RequestAction) => {
 
+            if(typeof action.request === "undefined")
+                return next(action);
+
             if(action.auth) {
                 if(!opts.resolveToken) {
                     throw new TypeError(
