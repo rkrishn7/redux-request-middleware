@@ -1,11 +1,10 @@
 import {
     setAccessToken,
-    getInitialAccessToken
+    getInitialAccessToken,
+    sendAuthRequest
 } from "./store.js";
 
 class Main extends React.Component {
-
-    static #ORIGIN = "http://localhost:3000/api/";
 
     componentDidMount() {
         // Simulate login, retrieve access token
@@ -30,29 +29,18 @@ class Main extends React.Component {
     }
 
     makeRequest() {
-        fetch(Main.#ORIGIN + 'protected/', {
-            headers: {
-                "Authorization" : "Bearer sdsdf"
-            }
-        }).then((response) => {
-            return response.json();
-        }).then((json) => {
-            this.setState((state) => {
-                return (json.error) ? {
-                    ...state,
-                    error: json.error
-                } : {
-                    ...state,
-                    response: "OK"
-                };
-            });
+        this.props.sendAuthRequest().then((data) => {
+            this.setState((state) => ({
+                ...state,
+                response: data
+            }));
         });
     }
 
     render() {
         return (
             React.createElement("div", null, React.createElement("button", {
-                onClick: this.makeRequest
+                onClick: this.props.makeRequest
               }, "send request to protected route"), React.createElement("div", null, "Response: ", this.state.response), 
               React.createElement("button", {
                 onClick: () => {}
@@ -75,7 +63,8 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
     return {
         simulateLogin: () => dispatch(getInitialAccessToken()),
-        updateAccess: (value) => dispatch(setAccessToken(value))
+        updateAccess: (value) => dispatch(setAccessToken(value)),
+        sendAuthRequest: () => dispatch(sendAuthRequest())
     }
 }
 

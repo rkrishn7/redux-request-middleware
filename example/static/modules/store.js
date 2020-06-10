@@ -41,6 +41,23 @@ export function getInitialAccessToken() {
     }
 }
 
+export function sendAuthRequest() {
+    return dispatch => {
+        return dispatch({
+            request: {
+                url: "http://localhost:3000/api/protected",
+            },
+            auth: true,
+        }).then((response) => {
+            if(response.status === 200) {
+                return Promise.resolve(response.data);
+            }
+
+            return Promise.reject(new Error("Unable to login"));
+        });
+    }
+}
+
 /**
  * Reducer
  */
@@ -78,11 +95,24 @@ const REDUX_REQUEST_MIDDLEWARE_OPTIONS = {
         const state = getState();
         const access = state.access, refresh = state.refresh;
 
+        const payload = state.access.split(".")[1];
+        const decoded = Base64.decode(payload);
+
+        // Check if we need to get a new access token
+        if(Math.floor(Date.now() / 1000) >= (new Date(decoded.exp) / 1000)) {
+            return axios({
+                url: "http://localhost:3000/api/access?refresh=" + refresh,
+            }).then((response) => {
+                if(response.status === 200) {
+                    dispatch(setAccessToken(response.data.access));
+                    return response.data.access;
+                }
+
+                return "";
+            });
+        }
         
-
-
-
-        return "sdsdf";
+        return access;
     }
 };
 
