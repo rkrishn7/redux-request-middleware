@@ -34,13 +34,18 @@ class Main extends React.Component {
                 ...state,
                 response: data
             }));
+        }).catch((err) => {
+            this.setState((state) => ({
+                ...state,
+                error: err.message
+            }));
         });
     }
 
     render() {
         return (
             React.createElement("div", null, React.createElement("button", {
-                onClick: this.props.makeRequest
+                onClick: this.makeRequest
               }, "send request to protected route"), React.createElement("div", null, "Response: ", this.state.response), 
               React.createElement("button", {
                 onClick: () => {}

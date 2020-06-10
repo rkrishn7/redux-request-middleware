@@ -50,7 +50,7 @@ export function sendAuthRequest() {
             auth: true,
         }).then((response) => {
             if(response.status === 200) {
-                return Promise.resolve(response.data);
+                return Promise.resolve(JSON.stringify(response.data));
             }
 
             return Promise.reject(new Error("Unable to login"));
@@ -94,6 +94,9 @@ const REDUX_REQUEST_MIDDLEWARE_OPTIONS = {
 
         const state = getState();
         const access = state.access, refresh = state.refresh;
+
+        if(typeof access === "undefined")
+            return "";
 
         const payload = state.access.split(".")[1];
         const decoded = Base64.decode(payload);
