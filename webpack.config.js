@@ -7,6 +7,6 @@ module.exports = {
     filename: 'bundle.js',
     library: 'ReduxReqMW',
     libraryTarget: 'umd',
-    filename: 'index.js',
+    filename: 'ReduxReqMW.js',
   }
 };

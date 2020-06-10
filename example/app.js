@@ -9,7 +9,7 @@ const app = express();
 const SECRET = 'SECRET_HERE';
 
 app.use("/", express.static(path.join(__dirname, "static")));
-app.use("/", express.static(path.join(__dirname), "../dist/index.js"));
+app.use("/", express.static(path.join(__dirname, "../dist")));
 
 function auth(req, res, next) {
 
