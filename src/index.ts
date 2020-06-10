@@ -44,7 +44,8 @@ export function createRequestMiddleware(opts: Options = defaults) {
                 if(opts.appendToken) {
                     action.request = opts.appendToken(action.request);
                 } else {
-                    // Default behavior
+                    (typeof action.request.headers === "undefined") && (action.request.headers = {});
+
                     action.request.headers["authorization"] = "Bearer " + token;
                 }
             }
